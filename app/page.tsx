@@ -490,7 +490,7 @@ const selectedEvents = selectedDate
 
               <button
                 onClick={() => setSelectedDate(null)}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xl"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xl text-stone-900"
               >
                 ×
               </button>
