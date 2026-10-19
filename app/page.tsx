@@ -12,6 +12,7 @@ type CalendarEvent = {
 end_date: string | null;
   start_time: string | null;
   duration_minutes: number | null;
+amount: number | null;
 reminder_minutes: number | null;
   notes: string | null;
   color: string;
@@ -42,6 +43,7 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [startTime, setStartTime] = useState("09:30");
   const [duration, setDuration] = useState(60);
+const [amount, setAmount] = useState("");
 const [reminderMinutes, setReminderMinutes] = useState(120);
   const [notes, setNotes] = useState("");
   const [color, setColor] = useState(COLORS[1]);
@@ -135,6 +137,7 @@ setEditingEvent(null);
     setTitle("");
     setStartTime("09:30");
     setDuration(60);
+setAmount("");
 setReminderMinutes(120);
     setNotes("");
     setColor(COLORS[1]);
@@ -149,6 +152,7 @@ function openEdit(event: CalendarEvent) {
   setTitle(event.title);
   setStartTime(event.start_time || "09:30");
   setDuration(event.duration_minutes || 60);
+setAmount(event.amount != null ? String(event.amount) : "");
 setReminderMinutes(event.reminder_minutes ?? 120);
   setNotes(event.notes || "");
   setColor(event.color);
@@ -178,6 +182,7 @@ const eventData = {
   end_date: isMultiDay ? endDate : dateKey(selectedDate),
   start_time: isMultiDay ? null : startTime || null,
 duration_minutes: isMultiDay ? null : duration,
+amount: eventType === "client" && amount.trim() !== "" ? Number(amount) : null,
 reminder_minutes: eventType === "client" && !isMultiDay ? reminderMinutes : null,
   notes: notes.trim() || null,
   color,
@@ -258,7 +263,25 @@ async function deleteEvent() {
     return result;
   }, [currentDate]);
 
-  const selectedEvents = selectedDate
+const monthlyIncome = useMemo(() => {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  return events
+    .filter((event) => {
+      if (event.event_type !== "client") return false;
+      if (event.amount == null) return false;
+
+      const [eventYear, eventMonth] = event.start_date
+        .split("-")
+        .map(Number);
+
+      return eventYear === year && eventMonth === month + 1;
+    })
+    .reduce((total, event) => total + (event.amount ?? 0), 0);
+}, [events, currentDate]);
+  
+const selectedEvents = selectedDate
   ? events.filter((event) => {
       const selected = dateKey(selectedDate);
       const end = event.end_date || event.start_date;
@@ -333,6 +356,13 @@ async function deleteEvent() {
                 ›
               </button>
             </div>
+
+<div className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm">
+  本月收入：
+  <span className="ml-2 font-bold text-lg">
+    ${monthlyIncome.toLocaleString()}
+  </span>
+</div>
 
             <div className="hidden w-[94px] sm:block" />
           </div>
@@ -623,6 +653,25 @@ async function deleteEvent() {
                 </div>
               </div>
 )}
+
+{eventType === "client" && (
+  <div>
+    <label className="mb-2 block text-sm font-medium">
+      金額
+    </label>
+
+    <input
+      type="number"
+      min="0"
+      step="1"
+      value={amount}
+      onChange={(e) => setAmount(e.target.value)}
+      placeholder="請輸入金額"
+      className="w-full rounded-xl border border-stone-300 px-3 py-3"
+    />
+  </div>
+)}
+
 {eventType === "client" && !isMultiDay && (
   <div>
     <label className="mb-2 block text-sm font-medium">
