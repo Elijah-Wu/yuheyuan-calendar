@@ -30,7 +30,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date(2000, 0, 1));
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -50,6 +50,7 @@ const [isMultiDay, setIsMultiDay] = useState(false);
 const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
+setCurrentDate(new Date());
     checkLogin();
 
     const {
