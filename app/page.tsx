@@ -53,6 +53,10 @@ const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
 setCurrentDate(new Date());
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
     checkLogin();
 
     const {
