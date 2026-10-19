@@ -336,7 +336,7 @@ const selectedEvents = selectedDate
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <button
               onClick={goToday}
-              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-medium"
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-900"
             >
               回到今天
             </button>
@@ -349,25 +349,24 @@ const selectedEvents = selectedDate
                 ‹
               </button>
 
-              <h2 className="min-w-[140px] text-center text-lg font-bold">
+              <h2 className="min-w-[140px] text-center text-lg font-bold text-stone-900">
                 {currentDate.getFullYear()} 年 {currentDate.getMonth() + 1} 月
               </h2>
 
               <button
                 onClick={nextMonth}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-xl"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-xl text-stone-900"
               >
                 ›
               </button>
             </div>
 
-<div className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm">
+<div className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm text-stone-900">
   本月收入：
-  <span className="ml-2 font-bold text-lg">
+  <span className="ml-2 font-bold text-lg text-stone-900">
     ${monthlyIncome.toLocaleString()}
   </span>
 </div>
-
             <div className="hidden w-[94px] sm:block" />
           </div>
 
