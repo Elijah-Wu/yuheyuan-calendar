@@ -528,6 +528,12 @@ const selectedEvents = selectedDate
   </p>
 )}
 
+{event.event_type === "client" && event.amount != null && (
+  <p className="mt-2 text-sm font-semibold text-stone-700">
+    ${event.amount.toLocaleString()}
+  </p>
+)}
+
                     {event.notes && (
                       <p className="mt-2 text-sm text-stone-500">
                         {event.notes}
