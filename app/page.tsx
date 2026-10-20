@@ -50,12 +50,21 @@ const [reminderMinutes, setReminderMinutes] = useState(120);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
 const [isMultiDay, setIsMultiDay] = useState(false);
 const [endDate, setEndDate] = useState("");
+const [notificationPermission, setNotificationPermission] = useState<
+  NotificationPermission | "unsupported"
+>("default");
 
   useEffect(() => {
 setCurrentDate(new Date());
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js");
+}
+
+if ("Notification" in window) {
+  setNotificationPermission(Notification.permission);
+} else {
+  setNotificationPermission("unsupported");
 }
     checkLogin();
 
@@ -101,6 +110,31 @@ if ("serviceWorker" in navigator) {
 }
 
     setEvents((data ?? []) as CalendarEvent[]);
+  }
+
+  async function enableNotifications() {
+    if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+      alert("這個裝置目前不支援網頁通知。");
+      setNotificationPermission("unsupported");
+      return;
+    }
+
+    try {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+
+      if (permission === "granted") {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification("宇和苑行事曆", {
+          body: "通知已成功開啟。",
+        });
+      } else if (permission === "denied") {
+        alert("通知權限目前被關閉。請到 iPhone 設定中允許通知後再試一次。");
+      }
+    } catch (error) {
+      console.error("開啟通知失敗：", error);
+      alert("開啟通知失敗，請稍後再試。");
+    }
   }
 
   async function logout() {
@@ -323,12 +357,29 @@ const selectedEvents = selectedDate
               </p>
             </div>
 
-            <button
-              onClick={logout}
-              className="rounded-xl border border-stone-300 px-4 py-2 text-sm text-stone-600"
-            >
-              登出
-            </button>
+            <div className="flex items-center gap-2">
+              {notificationPermission !== "granted" && (
+                <button
+                  onClick={enableNotifications}
+                  className="rounded-xl bg-stone-900 px-3 py-2 text-sm font-medium text-white"
+                >
+                  開啟通知
+                </button>
+              )}
+
+              {notificationPermission === "granted" && (
+                <span className="rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-700">
+                  通知已開啟
+                </span>
+              )}
+
+              <button
+                onClick={logout}
+                className="rounded-xl border border-stone-300 px-4 py-2 text-sm text-stone-600"
+              >
+                登出
+              </button>
+            </div>
           </div>
         </header>
 
