@@ -476,12 +476,13 @@ const selectedEvents = selectedDate
           onClick={() => setSelectedDate(null)}
         >
           <div
-            className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl"
+            className="w-full max-w-md rounded-3xl bg-white p-6 text-stone-900 shadow-xl"
+            style={{ color: "#1c1917" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-5 flex items-start justify-between">
               <div>
-                <p className="text-sm text-stone-500">當日行程</p>
+                <p className="text-sm font-medium text-stone-700">當日行程</p>
 
                 <h3 className="mt-1 text-2xl font-bold">
                   {selectedDate.getMonth() + 1} 月 {selectedDate.getDate()} 日
@@ -513,7 +514,7 @@ const selectedEvents = selectedDate
                         style={{ backgroundColor: event.color }}
                       />
 
-                      <p className="font-bold">{event.title}</p>
+                      <p className="font-bold text-stone-900">{event.title}</p>
                     </div>
 
                     {event.end_date && event.end_date !== event.start_date ? (
@@ -544,7 +545,7 @@ const selectedEvents = selectedDate
                     )}
 <button
   onClick={() => openEdit(event)}
-  className="mt-3 rounded-xl border border-stone-300 px-3 py-2 text-sm font-medium"
+  className="mt-3 rounded-xl border border-stone-400 bg-white px-3 py-2 text-sm font-semibold text-stone-900"
 >
   修改
 </button>
@@ -565,7 +566,8 @@ const selectedEvents = selectedDate
 
       {showAdd && selectedDate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 text-stone-900 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 text-stone-900 shadow-xl"
+            style={{ color: "#1c1917" }}>
             <div className="mb-5 flex items-start justify-between">
               <div>
                 <p className="text-sm text-stone-500">
@@ -603,7 +605,7 @@ const selectedEvents = selectedDate
                       e.target.value as CalendarEvent["event_type"]
                     )
                   }
-                  className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+                  className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
                 >
                   <option value="client">客戶預約</option>
                   <option value="private">私人行程</option>
@@ -624,7 +626,7 @@ const selectedEvents = selectedDate
                       ? "請輸入客戶姓名"
                       : "請輸入行程名稱"
                   }
-                  className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+                  className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
                 />
               </div>
 
@@ -639,7 +641,7 @@ const selectedEvents = selectedDate
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+                    className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
                   />
                 </div>
   
@@ -652,7 +654,7 @@ const selectedEvents = selectedDate
                   <select
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
-                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+                    className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
                   >
                     <option value={30}>30 分鐘</option>
                     <option value={60}>60 分鐘</option>
@@ -676,7 +678,7 @@ const selectedEvents = selectedDate
       value={amount}
       onChange={(e) => setAmount(e.target.value)}
       placeholder="請輸入金額"
-      className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+      className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
     />
   </div>
 )}
@@ -690,7 +692,7 @@ const selectedEvents = selectedDate
     <select
       value={reminderMinutes}
       onChange={(e) => setReminderMinutes(Number(e.target.value))}
-      className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+      className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
     >
       <option value={30}>30 分鐘前</option>
       <option value={60}>1 小時前</option>
@@ -721,7 +723,7 @@ const selectedEvents = selectedDate
         value={endDate}
         min={selectedDate ? dateKey(selectedDate) : undefined}
         onChange={(e) => setEndDate(e.target.value)}
-        className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+        className="w-full rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
       />
     </div>
   )}
@@ -757,7 +759,7 @@ const selectedEvents = selectedDate
                   onChange={(e) => setNotes(e.target.value)}
                   rows={3}
                   placeholder="可留空"
-                  className="w-full resize-none rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+                  className="w-full resize-none rounded-xl border border-stone-400 bg-white px-3 py-3 font-medium text-stone-900 placeholder:text-stone-600"
                 />
               </div>
 
