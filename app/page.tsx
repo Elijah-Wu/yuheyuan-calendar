@@ -149,7 +149,22 @@ if ("Notification" in window) {
       }
     } catch (error) {
       console.error("開啟通知失敗：", error);
-      alert("開啟通知失敗，請稍後再試。");
+
+      let errorMessage = "未知錯誤";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error
+      ) {
+        errorMessage = String((error as { message?: unknown }).message);
+      } else {
+        errorMessage = String(error);
+      }
+
+      alert(`開啟通知失敗：\n${errorMessage}`);
     }
   }
 
