@@ -384,9 +384,13 @@ const selectedEvents = selectedDate
               )}
 
               {notificationPermission === "granted" && (
-                <span className="rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-700">
+                <button
+                  onClick={enableNotifications}
+                  className="rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-700"
+                  title="點一下可重新確認並儲存推播訂閱"
+                >
                   通知已開啟
-                </span>
+                </button>
               )}
 
               <button
