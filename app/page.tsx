@@ -344,7 +344,7 @@ const selectedEvents = selectedDate
             <div className="flex items-center gap-3">
               <button
                 onClick={previousMonth}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-xl"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-xl font-semibold text-stone-900"
               >
                 ‹
               </button>
@@ -565,7 +565,7 @@ const selectedEvents = selectedDate
 
       {showAdd && selectedDate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white p-6 text-stone-900 shadow-xl">
             <div className="mb-5 flex items-start justify-between">
               <div>
                 <p className="text-sm text-stone-500">
@@ -584,7 +584,7 @@ const selectedEvents = selectedDate
   setShowAdd(false);
   setEditingEvent(null);
 }}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xl"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xl font-semibold text-stone-900"
               >
                 ×
               </button>
@@ -592,7 +592,7 @@ const selectedEvents = selectedDate
 
             <div className="space-y-5">
               <div>
-                <label className="mb-2 block text-sm font-medium">
+                <label className="mb-2 block text-sm font-medium text-stone-900">
                   行程類型
                 </label>
 
@@ -603,7 +603,7 @@ const selectedEvents = selectedDate
                       e.target.value as CalendarEvent["event_type"]
                     )
                   }
-                  className="w-full rounded-xl border border-stone-300 px-3 py-3"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
                 >
                   <option value="client">客戶預約</option>
                   <option value="private">私人行程</option>
@@ -612,7 +612,7 @@ const selectedEvents = selectedDate
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium">
+                <label className="mb-2 block text-sm font-medium text-stone-900">
                   {eventType === "client" ? "客戶姓名" : "行程名稱"}
                 </label>
 
@@ -624,14 +624,14 @@ const selectedEvents = selectedDate
                       ? "請輸入客戶姓名"
                       : "請輸入行程名稱"
                   }
-                  className="w-full rounded-xl border border-stone-300 px-3 py-3"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
                 />
               </div>
 
 {!isMultiDay && (              
 <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-2 block text-sm font-medium">
+                  <label className="mb-2 block text-sm font-medium text-stone-900">
                     開始時間
                   </label>
 
@@ -639,20 +639,20 @@ const selectedEvents = selectedDate
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full rounded-xl border border-stone-300 px-3 py-3"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
                   />
                 </div>
   
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium">
+                  <label className="mb-2 block text-sm font-medium text-stone-900">
                     時長
                   </label>
 
                   <select
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
-                    className="w-full rounded-xl border border-stone-300 px-3 py-3"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
                   >
                     <option value={30}>30 分鐘</option>
                     <option value={60}>60 分鐘</option>
@@ -665,7 +665,7 @@ const selectedEvents = selectedDate
 
 {eventType === "client" && (
   <div>
-    <label className="mb-2 block text-sm font-medium">
+    <label className="mb-2 block text-sm font-medium text-stone-900">
       金額
     </label>
 
@@ -676,21 +676,21 @@ const selectedEvents = selectedDate
       value={amount}
       onChange={(e) => setAmount(e.target.value)}
       placeholder="請輸入金額"
-      className="w-full rounded-xl border border-stone-300 px-3 py-3"
+      className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
     />
   </div>
 )}
 
 {eventType === "client" && !isMultiDay && (
   <div>
-    <label className="mb-2 block text-sm font-medium">
+    <label className="mb-2 block text-sm font-medium text-stone-900">
       提醒
     </label>
 
     <select
       value={reminderMinutes}
       onChange={(e) => setReminderMinutes(Number(e.target.value))}
-      className="w-full rounded-xl border border-stone-300 px-3 py-3"
+      className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
     >
       <option value={30}>30 分鐘前</option>
       <option value={60}>1 小時前</option>
@@ -708,12 +708,12 @@ const selectedEvents = selectedDate
       onChange={(e) => setIsMultiDay(e.target.checked)}
       className="h-5 w-5"
     />
-    <span className="text-sm font-medium">跨日行程</span>
+    <span className="text-sm font-medium text-stone-900">跨日行程</span>
   </label>
 
   {isMultiDay && (
     <div className="mt-3">
-      <label className="mb-2 block text-sm font-medium">
+      <label className="mb-2 block text-sm font-medium text-stone-900">
         結束日期
       </label>
       <input
@@ -721,14 +721,14 @@ const selectedEvents = selectedDate
         value={endDate}
         min={selectedDate ? dateKey(selectedDate) : undefined}
         onChange={(e) => setEndDate(e.target.value)}
-        className="w-full rounded-xl border border-stone-300 px-3 py-3"
+        className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
       />
     </div>
   )}
 </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium">顏色</label>
+                <label className="mb-2 block text-sm font-medium text-stone-900">顏色</label>
 
                 <div className="flex flex-wrap gap-3">
                   {COLORS.map((item) => (
@@ -748,7 +748,7 @@ const selectedEvents = selectedDate
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium">
+                <label className="mb-2 block text-sm font-medium text-stone-900">
                   備註
                 </label>
 
@@ -757,7 +757,7 @@ const selectedEvents = selectedDate
                   onChange={(e) => setNotes(e.target.value)}
                   rows={3}
                   placeholder="可留空"
-                  className="w-full resize-none rounded-xl border border-stone-300 px-3 py-3"
+                  className="w-full resize-none rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
                 />
               </div>
 
