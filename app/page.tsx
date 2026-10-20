@@ -112,6 +112,13 @@ if ("Notification" in window) {
     setEvents((data ?? []) as CalendarEvent[]);
   }
 
+  function urlBase64ToUint8Array(base64String: string) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+  }
+
   async function enableNotifications() {
     if (!("Notification" in window) || !("serviceWorker" in navigator)) {
       alert("這個裝置目前不支援網頁通知。");
@@ -125,9 +132,18 @@ if ("Notification" in window) {
 
       if (permission === "granted") {
         const registration = await navigator.serviceWorker.ready;
-        await registration.showNotification("宇和苑行事曆", {
-          body: "通知已成功開啟。",
-        });
+        const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+        if (!publicKey) throw new Error("找不到 VAPID Public Key");
+
+        const existingSubscription = await registration.pushManager.getSubscription();
+        const pushSubscription = existingSubscription ?? (await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(publicKey) }));
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) throw new Error("目前沒有登入帳號");
+        const subscriptionJson = pushSubscription.toJSON();
+        if (!subscriptionJson.endpoint || !subscriptionJson.keys?.p256dh || !subscriptionJson.keys?.auth) throw new Error("Push Subscription 資料不完整");
+        const { error: subscriptionError } = await supabase.from("push_subscriptions").upsert({ user_id: session.user.id, endpoint: subscriptionJson.endpoint, p256dh: subscriptionJson.keys.p256dh, auth: subscriptionJson.keys.auth }, { onConflict: "endpoint" });
+        if (subscriptionError) throw subscriptionError;
+        await registration.showNotification("宇和苑行事曆", { body: "通知已成功開啟。" });
       } else if (permission === "denied") {
         alert("通知權限目前被關閉。請到 iPhone 設定中允許通知後再試一次。");
       }
