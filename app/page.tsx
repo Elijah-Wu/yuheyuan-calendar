@@ -516,7 +516,7 @@ const selectedEvents = selectedDate
     return (
       <div
         key={event.id}
-        className={`truncate px-1.5 py-1 text-[11.5px] font-medium text-stone-800 sm:text-sm ${
+        className={`truncate px-1 py-1 text-[11px] font-medium text-stone-800 sm:text-sm ${
           isMultiDay
             ? `${isStart ? "rounded-l-md" : ""} ${
                 isEnd ? "rounded-r-md" : ""
@@ -608,13 +608,15 @@ const selectedEvents = selectedDate
     {event.start_date.replaceAll("-", "/")} ～ {event.end_date.replaceAll("-", "/")}
   </p>
 ) : (
-  <p className="mt-1 text-base font-medium text-stone-700">
-    {event.start_time
-      ? event.start_time.slice(0, 5)
-      : "未設定時間"}
-    {event.duration_minutes
-      ? ` · ${event.duration_minutes} 分鐘`
-      : ""}
+  <p className="mt-1 font-medium text-stone-700">
+    <span className="text-lg">
+      {event.start_time
+        ? event.start_time.slice(0, 5)
+        : "未設定時間"}
+    </span>
+    {event.duration_minutes && (
+      <span className="text-base">{` · ${event.duration_minutes} 分鐘`}</span>
+    )}
   </p>
 )}
 
