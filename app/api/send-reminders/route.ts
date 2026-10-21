@@ -16,7 +16,17 @@ function getTaiwanDateString(date = new Date()) {
   }).format(date);
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+const authHeader = request.headers.get("authorization");
+const cronSecret = process.env.CRON_SECRET;
+
+if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+  return NextResponse.json(
+    { ok: false, error: "Unauthorized" },
+    { status: 401 }
+  );
+}
+
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
