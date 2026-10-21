@@ -536,12 +536,7 @@ const selectedEvents = selectedDate
             <span>&nbsp;</span>
           )
         ) : (
-          <>
-            {event.start_time
-              ? `${event.start_time.slice(0, 5)} `
-              : ""}
-            {event.title}
-          </>
+          event.title
         )}
       </div>
     );
@@ -591,11 +586,13 @@ const selectedEvents = selectedDate
                 這一天目前沒有行程
               </div>
             ) : (
-              <div className="max-h-[350px] space-y-2 overflow-y-auto">
+              <div className="max-h-[430px] space-y-2 overflow-y-auto">
                 {selectedEvents.map((event) => (
-                  <div
+                  <button
                     key={event.id}
-                    className="rounded-2xl border border-stone-200 p-4"
+                    type="button"
+                    onClick={() => openEdit(event)}
+                    className="block w-full rounded-2xl border border-stone-200 px-4 py-3 text-left transition hover:bg-stone-50"
                   >
                     <div className="flex items-center gap-2">
                       <span
@@ -607,11 +604,11 @@ const selectedEvents = selectedDate
                     </div>
 
                     {event.end_date && event.end_date !== event.start_date ? (
-  <p className="mt-2 text-sm text-stone-600">
+  <p className="mt-1 text-base font-medium text-stone-700">
     {event.start_date.replaceAll("-", "/")} ～ {event.end_date.replaceAll("-", "/")}
   </p>
 ) : (
-  <p className="mt-2 text-sm text-stone-600">
+  <p className="mt-1 text-base font-medium text-stone-700">
     {event.start_time
       ? event.start_time.slice(0, 5)
       : "未設定時間"}
@@ -622,23 +619,17 @@ const selectedEvents = selectedDate
 )}
 
 {event.event_type === "client" && event.amount != null && (
-  <p className="mt-2 text-sm font-semibold text-stone-700">
+  <p className="mt-1 text-sm font-semibold text-stone-700">
     ${event.amount.toLocaleString()}
   </p>
 )}
 
                     {event.notes && (
-                      <p className="mt-2 text-sm text-stone-500">
+                      <p className="mt-1 text-sm text-stone-500">
                         {event.notes}
                       </p>
                     )}
-<button
-  onClick={() => openEdit(event)}
-  className="mt-3 rounded-xl border border-stone-300 px-3 py-2 text-sm font-medium text-stone-900"
->
-  修改
-</button>
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
