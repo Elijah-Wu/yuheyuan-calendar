@@ -512,7 +512,7 @@ const selectedEvents = selectedDate
     return (
       <div
         key={event.id}
-        className={`truncate px-1.5 py-1 text-[10px] font-medium text-stone-800 ${
+        className={`truncate px-1.5 py-1 text-[13px] font-medium text-stone-800 sm:text-sm ${
           isMultiDay
             ? `${isStart ? "rounded-l-md" : ""} ${
                 isEnd ? "rounded-r-md" : ""
@@ -544,7 +544,7 @@ const selectedEvents = selectedDate
   })}
 
   {dayEvents.length > 3 && (
-    <p className="px-1 text-[10px] text-stone-500">
+    <p className="px-1 text-xs text-stone-500 sm:text-sm">
       +{dayEvents.length - 3} 筆
     </p>
   )}
