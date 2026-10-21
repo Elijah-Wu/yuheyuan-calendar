@@ -516,7 +516,7 @@ const selectedEvents = selectedDate
     return (
       <div
         key={event.id}
-        className={`truncate px-1.5 py-1 text-[15px] font-medium text-stone-800 sm:text-base ${
+        className={`truncate px-1.5 py-1 text-[13px] font-medium text-stone-800 sm:text-sm ${
           isMultiDay
             ? `${isStart ? "rounded-l-md" : ""} ${
                 isEnd ? "rounded-r-md" : ""
@@ -536,12 +536,12 @@ const selectedEvents = selectedDate
             <span>&nbsp;</span>
           )
         ) : (
-          <>
-            {event.start_time
-              ? `${event.start_time.slice(0, 5)} `
-              : ""}
-            {event.title}
-          </>
+          <div className="leading-tight">
+            {event.start_time && (
+              <div className="truncate">{event.start_time.slice(0, 5)}</div>
+            )}
+            <div className="truncate font-semibold">{event.title}</div>
+          </div>
         )}
       </div>
     );
