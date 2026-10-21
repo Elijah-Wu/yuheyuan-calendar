@@ -158,7 +158,10 @@ export async function GET() {
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error:
+  error instanceof Error
+    ? error.message
+    : JSON.stringify(error),
       },
       { status: 500 }
     );
