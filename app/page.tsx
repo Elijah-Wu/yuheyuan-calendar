@@ -536,12 +536,12 @@ const selectedEvents = selectedDate
             <span>&nbsp;</span>
           )
         ) : (
-          <div className="leading-tight">
-            {event.start_time && (
-              <div className="truncate">{event.start_time.slice(0, 5)}</div>
-            )}
-            <div className="truncate font-semibold">{event.title}</div>
-          </div>
+          <>
+            {event.start_time
+              ? `${event.start_time.slice(0, 5)} `
+              : ""}
+            {event.title}
+          </>
         )}
       </div>
     );
