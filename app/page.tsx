@@ -493,7 +493,7 @@ const selectedEvents = selectedDate
                 <button
                   key={dateKey(date)}
                   onClick={() => setSelectedDate(date)}
-                  className="h-[142px] overflow-hidden border-b border-r border-stone-200 bg-white p-1.5 text-left align-top hover:bg-stone-50 sm:h-[150px] sm:p-2"
+                  className="flex h-[142px] flex-col items-stretch justify-start overflow-hidden border-b border-r border-stone-200 bg-white p-1.5 text-left hover:bg-stone-50 sm:h-[150px] sm:p-2"
                 >
                   <span
                     className={
