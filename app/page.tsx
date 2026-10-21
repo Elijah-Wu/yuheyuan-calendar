@@ -51,6 +51,8 @@ const [reminderMinutes, setReminderMinutes] = useState(120);
 const [isMultiDay, setIsMultiDay] = useState(false);
 const [endDate, setEndDate] = useState("");
 const [showIncome, setShowIncome] = useState(false);
+const [showSearch, setShowSearch] = useState(false);
+const [searchQuery, setSearchQuery] = useState("");
 const [notificationPermission, setNotificationPermission] = useState<
   NotificationPermission | "unsupported"
 >("default");
@@ -256,6 +258,7 @@ amount: eventType === "client" && amount.trim() !== "" ? Number(amount) : null,
 reminder_minutes: eventType === "client" && !isMultiDay ? reminderMinutes : null,
   notes: notes.trim() || null,
   color,
+  reminder_sent_at: null,
 };
 
 if (editingEvent) {
@@ -360,6 +363,33 @@ const selectedEvents = selectedDate
     })
   : [];
 
+const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+const searchResults = normalizedSearchQuery
+  ? events
+      .filter((event) =>
+        [event.title, event.notes ?? ""].some((value) =>
+          value.toLowerCase().includes(normalizedSearchQuery)
+        )
+      )
+      .sort((a, b) => {
+        const aKey = `${a.start_date} ${a.start_time ?? "00:00"}`;
+        const bKey = `${b.start_date} ${b.start_time ?? "00:00"}`;
+        return bKey.localeCompare(aKey);
+      })
+  : [];
+
+function openSearchResult(event: CalendarEvent) {
+  const [year, month, day] = event.start_date.split("-").map(Number);
+  const eventDate = new Date(year, month - 1, day);
+
+  setSelectedDate(eventDate);
+  setCurrentDate(new Date(year, month - 1, 1));
+  setShowSearch(false);
+  setSearchQuery("");
+  openEdit(event);
+}
+
   const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
 
   if (loading) {
@@ -457,7 +487,16 @@ const selectedEvents = selectedDate
     ? `本月收入：$${monthlyIncome.toLocaleString()}`
     : "查看收入"}
 </button>
-            <div className="hidden w-[94px] sm:block" />
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery("");
+                setShowSearch(true);
+              }}
+              className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-900"
+            >
+              搜尋
+            </button>
           </div>
 
           <div className="grid grid-cols-7 border-l border-t border-stone-200">
@@ -554,6 +593,83 @@ const selectedEvents = selectedDate
           </div>
         </section>
       </div>
+
+      {showSearch && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setShowSearch(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-4 flex items-start justify-between">
+              <div>
+                <p className="text-sm text-stone-500">搜尋行程</p>
+                <h3 className="mt-1 text-2xl font-bold text-stone-900">
+                  客戶・行程搜尋
+                </h3>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowSearch(false)}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-xl text-stone-900"
+              >
+                ×
+              </button>
+            </div>
+
+            <input
+              autoFocus
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="輸入客戶姓名、行程名稱或備註"
+              className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+            />
+
+            <div className="mt-4 max-h-[430px] space-y-2 overflow-y-auto">
+              {!normalizedSearchQuery ? (
+                <div className="rounded-2xl bg-stone-50 px-4 py-6 text-center text-sm text-stone-500">
+                  輸入關鍵字開始搜尋
+                </div>
+              ) : searchResults.length === 0 ? (
+                <div className="rounded-2xl bg-stone-50 px-4 py-6 text-center text-sm text-stone-500">
+                  找不到符合的行程
+                </div>
+              ) : (
+                searchResults.map((event) => (
+                  <button
+                    key={event.id}
+                    type="button"
+                    onClick={() => openSearchResult(event)}
+                    className="block w-full rounded-2xl border border-stone-200 px-4 py-3 text-left transition hover:bg-stone-50"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="h-3 w-3 rounded-full"
+                        style={{ backgroundColor: event.color }}
+                      />
+                      <p className="font-bold text-stone-900">{event.title}</p>
+                    </div>
+
+                    <p className="mt-1 text-sm font-medium text-stone-700">
+                      {event.start_date.replaceAll("-", "/")}
+                      {event.start_time ? ` · ${event.start_time.slice(0, 5)}` : ""}
+                    </p>
+
+                    {event.notes && (
+                      <p className="mt-1 truncate text-sm text-stone-500">
+                        {event.notes}
+                      </p>
+                    )}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedDate && !showAdd && (
         <div
