@@ -475,7 +475,7 @@ const selectedEvents = selectedDate
                 return (
                   <div
                     key={`empty-${index}`}
-                    className="min-h-[90px] border-b border-r border-stone-200 bg-stone-50/50 sm:min-h-[125px]"
+                    className="h-[142px] border-b border-r border-stone-200 bg-stone-50/50 sm:h-[150px]"
                   />
                 );
               }
@@ -493,7 +493,7 @@ const selectedEvents = selectedDate
                 <button
                   key={dateKey(date)}
                   onClick={() => setSelectedDate(date)}
-                  className="min-h-[90px] overflow-hidden border-b border-r border-stone-200 bg-white p-1.5 text-left hover:bg-stone-50 sm:min-h-[125px] sm:p-2"
+                  className="h-[142px] overflow-hidden border-b border-r border-stone-200 bg-white p-1.5 text-left align-top hover:bg-stone-50 sm:h-[150px] sm:p-2"
                 >
                   <span
                     className={
