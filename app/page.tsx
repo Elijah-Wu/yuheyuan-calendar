@@ -50,6 +50,7 @@ const [reminderMinutes, setReminderMinutes] = useState(120);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
 const [isMultiDay, setIsMultiDay] = useState(false);
 const [endDate, setEndDate] = useState("");
+const [showIncome, setShowIncome] = useState(false);
 const [notificationPermission, setNotificationPermission] = useState<
   NotificationPermission | "unsupported"
 >("default");
@@ -447,12 +448,15 @@ const selectedEvents = selectedDate
               </button>
             </div>
 
-<div className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm text-stone-900">
-  本月收入：
-  <span className="ml-2 font-bold text-lg text-stone-900">
-    ${monthlyIncome.toLocaleString()}
-  </span>
-</div>
+<button
+  type="button"
+  onClick={() => setShowIncome((value) => !value)}
+  className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-900"
+>
+  {showIncome
+    ? `本月收入：$${monthlyIncome.toLocaleString()}`
+    : "查看收入"}
+</button>
             <div className="hidden w-[94px] sm:block" />
           </div>
 
@@ -512,7 +516,7 @@ const selectedEvents = selectedDate
     return (
       <div
         key={event.id}
-        className={`truncate px-1.5 py-1 text-[13px] font-medium text-stone-800 sm:text-sm ${
+        className={`truncate px-1.5 py-1 text-[15px] font-medium text-stone-800 sm:text-base ${
           isMultiDay
             ? `${isStart ? "rounded-l-md" : ""} ${
                 isEnd ? "rounded-r-md" : ""
