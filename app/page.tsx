@@ -45,6 +45,14 @@ function calculateEndTime(startTime: string, durationMinutes: number) {
   return `${String(endHours).padStart(2, "0")}:${String(endMinutes).padStart(2, "0")}`;
 }
 
+const HOUR_OPTIONS = Array.from({ length: 24 }, (_, hour) =>
+  String(hour).padStart(2, "0")
+);
+
+const MINUTE_OPTIONS = Array.from({ length: 12 }, (_, index) =>
+  String(index * 5).padStart(2, "0")
+);
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -857,13 +865,39 @@ function openSearchResult(event: CalendarEvent) {
                     開始時間
                   </label>
 
-                  <input
-                    type="time"
-                    step={300}
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
-                  />
+                  <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                    <select
+                      value={startTime.slice(0, 2)}
+                      onChange={(e) => {
+                        const minute = startTime.slice(3, 5) || "30";
+                        setStartTime(`${e.target.value}:${minute}`);
+                      }}
+                      className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-center text-stone-900"
+                    >
+                      {HOUR_OPTIONS.map((hour) => (
+                        <option key={hour} value={hour}>
+                          {hour}
+                        </option>
+                      ))}
+                    </select>
+
+                    <span className="text-lg font-medium text-stone-500">:</span>
+
+                    <select
+                      value={startTime.slice(3, 5)}
+                      onChange={(e) => {
+                        const hour = startTime.slice(0, 2) || "09";
+                        setStartTime(`${hour}:${e.target.value}`);
+                      }}
+                      className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-center text-stone-900"
+                    >
+                      {MINUTE_OPTIONS.map((minute) => (
+                        <option key={minute} value={minute}>
+                          {minute}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
   
 
