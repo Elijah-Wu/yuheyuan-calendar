@@ -19,13 +19,38 @@ reminder_minutes: number | null;
 };
 
 const COLORS = [
-  "#F5C84C",
-  "#6FA8DC",
+  "#FFE082",
+  "#90CAF9",
   "#9B7EDC",
   "#79B88A",
   "#E57373",
-  "#F39AC1",
+  "#F8BBD0",
 ];
+
+const COLOR_DISPLAY_MAP: Record<string, string> = {
+  "#F5C84C": "#FFE082",
+  "#6FA8DC": "#90CAF9",
+  "#F39AC1": "#F8BBD0",
+};
+
+function displayColor(color: string) {
+  return COLOR_DISPLAY_MAP[color] ?? color;
+}
+
+function calculateEndTime(startTime: string, durationMinutes: number) {
+  const [hours, minutes] = startTime.split(":").map(Number);
+  const totalMinutes = hours * 60 + minutes + durationMinutes;
+  const endHours = Math.floor((totalMinutes % 1440) / 60);
+  const endMinutes = totalMinutes % 60;
+  return `${String(endHours).padStart(2, "0")}:${String(endMinutes).padStart(2, "0")}`;
+}
+
+const TIME_OPTIONS = Array.from({ length: 288 }, (_, index) => {
+  const totalMinutes = index * 5;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+});
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -227,7 +252,7 @@ function openEdit(event: CalendarEvent) {
 setAmount(event.amount != null ? String(event.amount) : "");
 setReminderMinutes(event.reminder_minutes ?? 120);
   setNotes(event.notes || "");
-  setColor(event.color);
+  setColor(displayColor(event.color));
 setIsMultiDay(
   !!event.end_date && event.end_date !== event.start_date
 );
@@ -563,7 +588,7 @@ function openSearchResult(event: CalendarEvent) {
             : "rounded-md"
         }`}
         style={{
-          backgroundColor: event.color,
+          backgroundColor: displayColor(event.color),
           marginLeft: isMultiDay && !isStart ? "-8px" : undefined,
           marginRight: isMultiDay && !isEnd ? "-8px" : undefined,
         }}
@@ -648,7 +673,7 @@ function openSearchResult(event: CalendarEvent) {
                     <div className="flex items-center gap-2">
                       <span
                         className="h-3 w-3 rounded-full"
-                        style={{ backgroundColor: event.color }}
+                        style={{ backgroundColor: displayColor(event.color) }}
                       />
                       <p className="font-bold text-stone-900">{event.title}</p>
                     </div>
@@ -713,7 +738,7 @@ function openSearchResult(event: CalendarEvent) {
                     <div className="flex items-center gap-2">
                       <span
                         className="h-3 w-3 rounded-full"
-                        style={{ backgroundColor: event.color }}
+                        style={{ backgroundColor: displayColor(event.color) }}
                       />
 
                       <p className="font-bold text-stone-900">{event.title}</p>
@@ -727,11 +752,16 @@ function openSearchResult(event: CalendarEvent) {
   <p className="mt-1 font-medium text-stone-700">
     <span className="text-lg">
       {event.start_time
-        ? event.start_time.slice(0, 5)
+        ? event.duration_minutes
+          ? `${event.start_time.slice(0, 5)} - ${calculateEndTime(
+              event.start_time.slice(0, 5),
+              event.duration_minutes
+            )}`
+          : event.start_time.slice(0, 5)
         : "未設定時間"}
     </span>
     {event.duration_minutes && (
-      <span className="text-base">{` · ${event.duration_minutes} 分鐘`}</span>
+      <span className="text-base">{`    ${event.duration_minutes} 分鐘`}</span>
     )}
   </p>
 )}
@@ -834,12 +864,17 @@ function openSearchResult(event: CalendarEvent) {
                     開始時間
                   </label>
 
-                  <input
-                    type="time"
+                  <select
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
-                  />
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900"
+                  >
+                    {TIME_OPTIONS.map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
                 </div>
   
 
