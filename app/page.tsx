@@ -45,13 +45,6 @@ function calculateEndTime(startTime: string, durationMinutes: number) {
   return `${String(endHours).padStart(2, "0")}:${String(endMinutes).padStart(2, "0")}`;
 }
 
-const TIME_OPTIONS = Array.from({ length: 288 }, (_, index) => {
-  const totalMinutes = index * 5;
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-});
-
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -761,7 +754,7 @@ function openSearchResult(event: CalendarEvent) {
         : "未設定時間"}
     </span>
     {event.duration_minutes && (
-      <span className="text-base">{`    ${event.duration_minutes} 分鐘`}</span>
+      <span className="ml-4 text-base">{`${event.duration_minutes} 分鐘`}</span>
     )}
   </p>
 )}
@@ -864,17 +857,13 @@ function openSearchResult(event: CalendarEvent) {
                     開始時間
                   </label>
 
-                  <select
+                  <input
+                    type="time"
+                    step={300}
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900"
-                  >
-                    {TIME_OPTIONS.map((time) => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3 py-3 text-stone-900 placeholder:text-stone-500"
+                  />
                 </div>
   
 
